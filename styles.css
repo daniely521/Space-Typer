@@ -1,3 +1,56 @@
+body {
+    background-image: url("spaceBg.png");
+    background-repeat: no-repeat;
+    background-size: 190vh;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+#start-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+}
+
+#game-container {
+    position: relative;
+    width: 80%;
+    height: 500px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+#asteroid-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.asteroid {
+    position: absolute;
+    bottom: 0;
+    width: 50px;
+    height: auto;
+    transition: bottom 1s linear;
+}
+
+#word-input {
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+}
+
 .hidden {
     display: none;
+}
+
+button{
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
 }
