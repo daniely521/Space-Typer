@@ -4,7 +4,7 @@ const levels = {
     3: ["window", "computer", "garden"],
     4: ["fantastic", "reliable", "adventure"],
     5: ["extraordinary", "sophisticated", "unbelievable"]
-}
+};
 
 let score = 0;
 let wordsTyped = 0;
@@ -29,24 +29,59 @@ startButton.addEventListener("click", ()=>{
     gameLoop();
 });
 
-wordInput.addEventListener("click", checkWord);
+wordInput.addEventListener("input", checkWord);
 
 function spawnAsteroid() {
     const wordList = levels[currentLevel];
     const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
     const asteroidSize = `asteroid${Math.min(currentLevel, 5)}.png`;
-    
+
+    // Create a container for asteroid and word
+    const asteroidContainer = document.createElement("div");
+    asteroidContainer.classList.add("asteroid-container");
+    asteroidContainer.style.left = `${Math.random() * 90}%`;
+
+    // Create the asteroid image
     const asteroid = document.createElement("img");
     asteroid.src = `resources/${asteroidSize}`;
     asteroid.classList.add("asteroid");
-    asteroid.style.left = `${Math.random() * 90}%`;
-    asteroid.style.bottom = "0px";
+    asteroid.dataset.word = randomWord; // Attach word to asteroid
 
+    // Create the word text
+    const wordText = document.createElement("div");
+    wordText.classList.add("asteroid-word");
+    wordText.textContent = randomWord;
+
+    // Append word and asteroid to the container
+    asteroidContainer.appendChild(wordText);
     asteroidContainer.appendChild(asteroid);
-    moveAsteroid(asteroid, randomWord);
+
+    // Add the container to the game area
+    document.getElementById("asteroid-container").appendChild(asteroidContainer);
+
+    // Start moving the asteroid
+    moveAsteroid(asteroidContainer);
 }
 
-function moveAsteroid() {
+
+function checkWord() {
+    const inputWord = wordInput.value.toLowerCase();
+    const asteroids = document.querySelectorAll('.asteroid');
+
+    asteroids.forEach((asteroid) => {
+        if (asteroid.dataset.word.toLowerCase() === inputWord) {
+            score += 10;
+            wordsTyped++;
+            updateScore();
+            updateWordsTyped();
+            checkLevelUp();
+            asteroid.remove();
+            wordInput.value = "";
+        };
+    });
+}
+
+function moveAsteroid(asteroid, word) {
     let asteroidBottom = 0;
     let interval = setInterval(() => {
         asteroidBottom += 5;
@@ -56,7 +91,7 @@ function moveAsteroid() {
             clearInterval(interval);
             asteroid.remove()
         }
-    }, 30);
+    }, 100);
 
     asteroid.addEventListener("click", ()=>{
         if (wordInput.value.toLowerCase() === word.toLowerCase()) {
